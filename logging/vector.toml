@@ -1,0 +1,25 @@
+# https://vector.dev/docs/setup/installation/platforms/docker/
+
+[sources.docker]
+  type = "docker" # required
+#  auto_partial_merge = true # optional, default
+  include_images = ["hello-world", "alpine"] # optional, no default
+
+## Transforms
+[transforms.tag_log]
+  # General
+  type = "add_fields" # required
+  inputs = ["docker"] # required
+  overwrite = true # optional, default
+
+  # Fields
+  fields.source_id = "${NETBEAM_SOURCE_ID}"
+  fields.envrionment = "${ENVIRONMENT}"
+
+## Output
+[sinks.console]
+  type = "console" # required
+  inputs = ["tag_log"] # required
+  target = "stdout" # optional, default
+  encoding.codec = "json" # required
+  encoding.timestamp_format = "rfc3339" # optional, default

@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  hello:
+    image: hello-world
+    depends_on:
+      - vector
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+  vector:
+    image: timberio/vector:0.10.0-alpine
+    env_file: .env
+    volumes:
+      - log-demo:/var/log
+      - ./logging/:/etc/vector/
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  log-demo:
